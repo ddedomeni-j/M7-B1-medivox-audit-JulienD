@@ -77,9 +77,9 @@ Le tableau suivant décrit les éléments couverts et exclus par la présente é
 | Constat | Éléments techniques / chiffrés | Lecture opérationnelle |
 |---|---|---|
 | Empreinte disque du modèle historique élevée | Random Forest : **4,956 Mo**. HistGradientBoosting : **0,366 Mo**. XGBoost : **0,971 Mo**. | Le modèle historique est environ 14 fois plus volumineux que HistGradientBoosting ; A évaluer en fonction de la configuration de déploiement. |
-| Inférence plus lente à volume élevé | Pour 10 000 lignes : Random Forest **45,845 ms**, HistGradientBoosting **15,788 ms**, XGBoost **14,187 ms**. | Les alternatives testées réduisent la latence par lot d'environ un facteur trois. L'impact réel dépend du volume attendu en production. |
+| Inférence plus lente à volume élevé | Pour un lot de 10 000 lignes les temps d'inférence sont : Random Forest **45,845 ms**, HistGradientBoosting **15,788 ms**, XGBoost **14,187 ms**. | Les alternatives testées réduisent la latence par lot d'environ un facteur trois. L'impact réel dépend du volume attendu en production. |
 | Chargement mémoire de XGBoost important | Variation de RSS à l'entraînement : Random Forest **+6,222 Mo**, HistGradientBoosting **+0,172 Mo**, XGBoost **+119,497 Mo**. | HistGradientBoosting est à envisager. XGBoost est rapide en inférence, mais son entraînement est nettement plus exigeant en mémoire. |
-| HistGradientBoosting est l'alternative la plus sobre | Taille de **0,366 Mo**, RSS de **+0,172 Mo** et inférence de **15,788 ms** sur 10 000 lignes. | Cette alternative présente la plus faible empreinte parmi les modèles testés. |
+| HistGradientBoosting est l'alternative la plus sobre | Taille de **0,366 Mo**, RSS de **+0,172 Mo** et inférence de **15,788 ms** sur un lot de 10 000 lignes. | Cette alternative présente la plus faible empreinte parmi les modèles testés. |
 | Temps d'entraînement comparables | Random Forest : **0,302 s** ; HistGradientBoosting : **0,314 s** ; XGBoost : **0,237 s**. | Sur le dataset fourni, ce critère ne permet pas à lui seul de différencier les modèles. |
 | Performance | F1 : Random Forest **0,691**, HistGradientBoosting **0,582**, XGBoost **0,549**. </br>Le modèle **Random Forest** a été évalué sur des **données déjà vues à l'entraînement**. | La performance du modèle historique est optimiste ; sa supériorité ne peut pas être établie sans faire une nouvelle évaluation une fois le pipeline d'entraînement corrigé. |
 | Latence de production non mesurée intégralement | Le script recharge le fichier `.joblib` à chaque prédiction ; les mesures réalisées concernent l'inférence du modèle. | Le temps réel inclut aussi le démarrage du script, le chargement disque et l'appel SSH. |
@@ -107,9 +107,9 @@ Le tableau suivant décrit les éléments couverts et exclus par la présente é
 | 🟠 P2 | Technique | Aucune analyse d'explicabilité locale ou globale n'est fournie pour comprendre les facteurs influençant un score. |
 | 🟠 P2 | Technique | Les tests disponibles sont limités au démarrage ; les entrées invalides, cas limites, régressions et comportements métier ne sont pas couverts. |
 | 🟠 P2 | Éthique / données personnelles | Le dataset contient `patient_id` et plusieurs quasi-identifiants ; aucune documentation sur l'anonymisation ou la pseudonymisation n'est fournie. Le risque de réidentification par recoupement doit être instruit. |
-| 🟡 P3 | Ressources | La Random Forest historique est plus lourde que HistGradientBoosting : **4,956 Mo** contre **0,366 Mo**, sans gain de performance démontré par une évaluation indépendante. |
-| 🟡 P3 | Ressources | À fort volume, la Random Forest est plus lente : **45,845 ms** pour 10 000 séjours, contre **15,788 ms** pour HistGradientBoosting et **14,187 ms** pour XGBoost. |
-| 🟡 P3 | Ressources | La Random Forest augmente le RSS de **6,222 Mo** à l'entraînement, contre **0,172 Mo** pour HistGradientBoosting dans le protocole mesuré. |
+| 🟡 P3 | Ressources | Le modèle Random Forest legacy est plus lourd que HistGradientBoosting : **4,956 Mo** contre **0,366 Mo**, sans gain de performance démontré par une évaluation indépendante. |
+| 🟡 P3 | Ressources | À fort volume, le modèle Random Forest est plus lent : **45,845 ms** pour un lot de 10 000 séjours, contre **15,788 ms** pour HistGradientBoosting et **14,187 ms** pour XGBoost. |
+| 🟡 P3 | Ressources | Le modèle Random Forest augmente le RSS de **6,222 Mo** à l'entraînement, contre **0,172 Mo** pour HistGradientBoosting dans le protocole mesuré. |
 | 🟡 P3 | Technique / ressources | Le modèle est rechargé depuis le disque à chaque appel de prédiction, ajoutant une latence et des accès disque dont l'impact dépend du volume réel de requêtes. |
 
 ## 7. Questions ouvertes pour le client

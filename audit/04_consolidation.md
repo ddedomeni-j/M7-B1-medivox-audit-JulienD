@@ -23,9 +23,9 @@ Le tableau ci-dessous liste les problèmes détectés lors de l'audit. Les prior
 | 🟠 P2 | Technique | Les tests disponibles vérifient uniquement le démarrage (données lisibles, modèle chargeable, script exécutable) ; aucune couverture visible des entrées invalides, des cas limites, des régressions ou du comportement métier. |
 | 🟠 P2 | Éthique / données personnelles | Le dataset contient un identifiant `patient_id` et plusieurs quasi-identifiants (âge, sexe, département, service, admission, durée de séjour) ; aucune documentation sur l'anonymisation ou la pseudonymisation n'est fournie. | Risque de réidentification croisées ; le statut réel des identifiants et les mesures de protection doivent être confirmés. |
 
-| 🟡 P3 | Ressources | La Random Forest legacy est nettement plus lourde que HistGB : **4,956 Mo** contre **0,366 Mo**, sans gain de performance démontré par une évaluation indépendante. |
-| 🟡 P3 | Ressources | À fort volume, la Random Forest est plus lente : **45,845 ms** pour 10 000 séjours contre **15,788 ms** pour HistGB et **14,187 ms** pour XGBoost. |
-| 🟡 P3 | Ressources | La Random Forest augmente le RSS de **6,222 Mo** lors de l'entraînement, contre **0,172 Mo** pour HistGB dans le protocole mesuré. |
+| 🟡 P3 | Ressources | Le modèle Random Forest legacy est nettement plus lourde que HistGB : **4,956 Mo** contre **0,366 Mo**, sans gain de performance démontré par une évaluation indépendante. |
+| 🟡 P3 | Ressources | À fort volume, le modèle Random Forest est plus lente : **45,845 ms** pour 10 000 séjours contre **15,788 ms** pour HistGB et **14,187 ms** pour XGBoost. |
+| 🟡 P3 | Ressources | Le modèle Random Forest augmente le RSS de **6,222 Mo** lors de l'entraînement, contre **0,172 Mo** pour HistGB dans le protocole mesuré. |
 | 🟡 P3 | Technique / ressources | Le modèle est rechargé depuis le disque à chaque appel de prédiction, ce qui ajoute une latence et des accès disque dont l'impact dépendra du volume réel de requêtes. |
 pas de test
 
